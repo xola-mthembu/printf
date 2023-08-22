@@ -1,19 +1,6 @@
 #include "main.h"
 
 /**
-* _strlen - Computes the length of a string.
-* @s: The string to measure.
-* Return: The length of the string.
-*/
-int _strlen(char *s)
-{
-int length = 0;
-while (s[length])
-length++;
-return (length);
-}
-
-/**
 * handle_specifier - Handles individual specifiers.
 * @specifier: The specifier character.
 * @args: The argument list.
@@ -23,7 +10,7 @@ return (length);
 int handle_specifier(char specifier, va_list args, char *buffer)
 {
 char *s;
-int length = 0, i; /* Declare 'i' at the beginning of the function */
+int length = 0;
 switch (specifier)
 {
 case 'c':
@@ -34,9 +21,12 @@ case 's':
 s = va_arg(args, char *);
 if (s == NULL)
 s = "(null)";
-length = _strlen(s);
-for (i = 0; i < length; i++)
-buffer[i] = s[i];
+length = 0;
+while (s[length])
+{
+buffer[length] = s[length];
+length++;
+}
 break;
 case '%':
 buffer[0] = '%';
