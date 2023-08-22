@@ -1,11 +1,27 @@
 #include "main.h"
 #include <unistd.h>
+
+
 /**
  * _strlen - Returns the length of a string.
  * @s: The string to be measured.
  * Return: The length of the string.
  */
 int _strlen(char *s); /* Declare _strlen function */
+
+int _strlen(char *s)
+{
+int length = 0;
+
+while (*s)
+{
+length++;
+s++;
+}
+
+return (length);
+}
+
 /**
  * _printf - Produces output according to a format.
  * @format: A string containing the desired format.
@@ -55,22 +71,5 @@ i++;
 va_end(args);
 
 return (count);
-}
-/**
- * _strlen - Returns the length of a string.
- * @s: The string to be measured.
- * Return: The length of the string.
- */
-int _strlen(char *s)
-{
-int length = 0;
-
-while (*s)
-{
-length++;
-s++;
-}
-
-return (length);
 }
 
