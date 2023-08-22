@@ -1,66 +1,63 @@
 #include "main.h"
-#include <unistd.h>
-#include <stddef.h>
 
 /**
- * print_buffer - Prints buffer content.
- * @buffer: The buffer.
- * @buff_ind: The buffer index.
- */
-void print_buffer(char buffer[], int *buff_ind)
+* _strlen - Computes the length of a string.
+* @s: The string to measure.
+* Return: The length of the string.
+*/
+int _strlen(char *s)
 {
-write(1, &buffer[0], *buff_ind);
-*buff_ind = 0;
-}
-
-/**
- * handle_specifier - Handles specific specifiers.
- * @specifier: The specifier.
- * @list: Argument list.
- * @buffer: The buffer.
- * @buff_ind: Buffer index.
- */
-void handle_specifier(char specifier, va_list list,
-char buffer[], int *buff_ind)
-{
-if (specifier == 'c')
-{
-buffer[*buff_ind] = va_arg(list, int);
-(*buff_ind)++;
-}
-else if (specifier == 's')
-{
-char *str = va_arg(list, char *);
-while (*str)
-{
-buffer[*buff_ind] = *str++;
-(*buff_ind)++;
-}
-}
-else if (specifier == '%')
-{
-buffer[*buff_ind] = '%';
-(*buff_ind)++;
-}
+int length = 0;
+while (s[length])
+length++;
+return (length);
 }
 
 /**
- * _printf - Custom printf function.
- * @format: The format string.
- * ...
- * Return: Printed characters.
- */
+* handle_specifier - Handles individual specifiers.
+* @specifier: The specifier character.
+* @args: The argument list.
+* @buffer: The buffer to write to.
+* Return: The number of characters added to the buffer.
+*/
+int handle_specifier(char specifier, va_list args, char *buffer)
+{
+char *s;
+int length = 0, i; /* Declare 'i' at the beginning of the function */
+switch (specifier)
+{
+case 'c':
+buffer[0] = (char)va_arg(args, int);
+length = 1;
+break;
+case 's':
+s = va_arg(args, char *);
+if (s == NULL)
+s = "(null)";
+length = _strlen(s);
+for (i = 0; i < length; i++)
+buffer[i] = s[i];
+break;
+case '%':
+buffer[0] = '%';
+length = 1;
+break;
+}
+return (length);
+}
+
+/**
+* _printf - Custom printf function.
+* @format: The format string.
+* Return: The number of characters printed.
+*/
 int _printf(const char *format, ...)
 {
-int i, buff_ind = 0;
-va_list list;
-char buffer[BUFF_SIZE];
-int printed_chars = 0;
+va_list args;
+int i, buff_ind = 0, printed_chars = 0;
+char buffer[BUFF_SIZE] = {0};
 
-if (format == NULL)
-return (-1);
-
-va_start(list, format);
+va_start(args, format);
 
 for (i = 0; format && format[i] != '\0'; i++)
 {
@@ -68,20 +65,22 @@ if (format[i] != '%')
 {
 buffer[buff_ind++] = format[i];
 if (buff_ind == BUFF_SIZE)
-print_buffer(buffer, &buff_ind);
-printed_chars++;
+{
+write(1, buffer, buff_ind);
+buff_ind = 0;
+}
 }
 else
 {
-print_buffer(buffer, &buff_ind);
-i++;
-handle_specifier(format[i], list, buffer, &buff_ind);
+write(1, buffer, buff_ind);
+buff_ind = 0;
+buff_ind += handle_specifier(format[++i], args, &buffer[buff_ind]);
 }
 }
 
-print_buffer(buffer, &buff_ind);
+write(1, buffer, buff_ind);
 
-va_end(list);
+va_end(args);
 
 return (printed_chars);
 }
