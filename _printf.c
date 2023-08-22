@@ -1,75 +1,88 @@
 #include "main.h"
 #include <unistd.h>
-
+#include <stddef.h>
 
 /**
- * _strlen - Returns the length of a string.
- * @s: The string to be measured.
- * Return: The length of the string.
+ * print_buffer - Prints buffer content.
+ * @buffer: The buffer.
+ * @buff_ind: The buffer index.
  */
-int _strlen(char *s); /* Declare _strlen function */
-
-int _strlen(char *s)
+void print_buffer(char buffer[], int *buff_ind)
 {
-int length = 0;
-
-while (*s)
-{
-length++;
-s++;
-}
-
-return (length);
+write(1, &buffer[0], *buff_ind);
+*buff_ind = 0;
 }
 
 /**
- * _printf - Produces output according to a format.
- * @format: A string containing the desired format.
- * @...: A variable number of arguments to be formatted.
- * Return: The number of characters printed.
+ * handle_specifier - Handles specific specifiers.
+ * @specifier: The specifier.
+ * @list: Argument list.
+ * @buffer: The buffer.
+ * @buff_ind: Buffer index.
+ */
+void handle_specifier(char specifier, va_list list,
+char buffer[], int *buff_ind)
+{
+if (specifier == 'c')
+{
+buffer[*buff_ind] = va_arg(list, int);
+(*buff_ind)++;
+}
+else if (specifier == 's')
+{
+char *str = va_arg(list, char *);
+while (*str)
+{
+buffer[*buff_ind] = *str++;
+(*buff_ind)++;
+}
+}
+else if (specifier == '%')
+{
+buffer[*buff_ind] = '%';
+(*buff_ind)++;
+}
+}
+
+/**
+ * _printf - Custom printf function.
+ * @format: The format string.
+ * ...
+ * Return: Printed characters.
  */
 int _printf(const char *format, ...)
 {
-va_list args;
-int count = 0;
-unsigned int i = 0;
-char c; /* Temporary variable to hold a character */
+int i, buff_ind = 0;
+va_list list;
+char buffer[BUFF_SIZE];
+int printed_chars = 0;
 
-va_start(args, format);
+if (format == NULL)
+return (-1);
 
-while (format && format[i])
+va_start(list, format);
+
+for (i = 0; format && format[i] != '\0'; i++)
 {
-if (format[i] == '%' && (format[i + 1] == 'c' || format[i + 1] == 's'
-|| format[i + 1] == '%'))
+if (format[i] != '%')
 {
-if (format[i + 1] == 'c')
-{
-c = va_arg(args, int);
-count += write(1, &c, 1);
-}
-else if (format[i + 1] == 's')
-{
-char *str = va_arg(args, char *);
-if (!str)
-str = "(null)";
-count += write(1, str, _strlen(str));
+buffer[buff_ind++] = format[i];
+if (buff_ind == BUFF_SIZE)
+print_buffer(buffer, &buff_ind);
+printed_chars++;
 }
 else
 {
-c = '%';
-count += write(1, &c, 1);
-}
+print_buffer(buffer, &buff_ind);
 i++;
+handle_specifier(format[i], list, buffer, &buff_ind);
 }
-else
-{
-count += write(1, &format[i], 1);
-}
-i++;
 }
 
-va_end(args);
+print_buffer(buffer, &buff_ind);
 
-return (count);
+va_end(list);
+
+return (printed_chars);
 }
 
