@@ -13,6 +13,7 @@ int print_binary(va_list args, char *buffer, int *index);
 int print_unsigned(va_list args, char *buffer, int *index);
 int print_octal(va_list args, char *buffer, int *index);
 int print_hex(va_list args, int upper_case, char *buffer, int *index);
+int print_S(va_list args, char *buffer, int *index); /* Prototype for new function */
 
 #endif /* MAIN_H */
 
