@@ -11,6 +11,8 @@ int _printf(const char *format, ...)
 {
 unsigned int i = 0, count = 0;
 va_list args;
+char buffer[1024];
+int index = 0;
 
 va_start(args, format);
 while (format && format[i])
@@ -51,10 +53,12 @@ i++;
 }
 else
 {
-count += write(1, &format[i], 1);
+count += write_buffer(buffer, &index, &format[i], 1);
 }
 i++;
 }
+if (index > 0)
+write(1, buffer, index);
 va_end(args);
 return (count);
 }
