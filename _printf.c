@@ -13,8 +13,10 @@ unsigned int i = 0, count = 0;
 va_list args;
 char buffer[1024];
 int index = 0;
+flags_t flags = {0, 0, 0};
 
 va_start(args, format);
+get_flags(format, &i, &flags);
 while (format && format[i])
 {
 if (format[i] == '%' && (format[i + 1] == 'c' ||
@@ -65,6 +67,10 @@ i++;
 }
 if (index > 0)
 write(1, buffer, index);
+if (flags->plus && n >= 0)
+write_buffer(buffer, index, "+", 1);
+else if (flags->space && n >= 0)
+write_buffer(buffer, index, " ", 1);
 va_end(args);
 return (count);
 }
