@@ -29,6 +29,11 @@ break;
 case '%':
 count += write(1, "%", 1);
 break;
+case 'd':
+case 'i':
+print_number(va_arg(args, int));
+count += _strlen(buffer);
+break;
 }
 i++;
 }
