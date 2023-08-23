@@ -78,6 +78,9 @@ break;
 case 'X':
 count += print_hex(args, 1, buffer, &buffer_index);
 break;
+case 'p':
+count += print_address(args, buffer, &buffer_index);
+break;
 }
 }
 else
