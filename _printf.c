@@ -35,6 +35,7 @@ int count = 0;
 int buffer_index = 0;
 unsigned int i = 0;
 char flags = '\0';
+char length = '\0';
 
 if (!format)
 return (-1);
@@ -51,7 +52,11 @@ if (format[i] == '+' || format[i] == ' ' || format[i] == '#')
 flags = format[i];
 i++;
 }
-
+if (format[i] == 'l' || format[i] == 'h')
+{
+length = format[i];
+i++;
+}
 switch (format[i])
 {
 case 'c':
@@ -68,7 +73,7 @@ count += print_percent(buffer, &buffer_index);
 break;
 case 'd':
 case 'i':
-count += print_int(args, flags, buffer, &buffer_index);
+count += print_int(args, flags, length, buffer, &buffer_index);
 break;
 case 'b':
 count += print_binary(args, buffer, &buffer_index);
@@ -90,6 +95,7 @@ count += print_address(args, buffer, &buffer_index);
 break;
 }
 flags = '\0';
+length = '\0';
 }
 else
 {
