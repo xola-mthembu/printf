@@ -34,6 +34,18 @@ case 'i':
 print_number(va_arg(args, int));
 count += _strlen(buffer);
 break;
+case 'u':
+print_unsigned(va_arg(args, unsigned int));
+break;
+case 'o':
+print_octal(va_arg(args, unsigned int));
+break;
+case 'x':
+print_hex(va_arg(args, unsigned int), 0);
+break;
+case 'X':
+print_hex(va_arg(args, unsigned int), 1);
+break;
 }
 i++;
 }
