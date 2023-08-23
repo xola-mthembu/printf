@@ -1,5 +1,6 @@
 #include "main.h"
 #include <unistd.h>
+#include <stdarg.h>
 
 /**
  * _putchar - Writes a character to stdout
@@ -10,6 +11,7 @@ int _putchar(char c)
 {
 return (write(1, &c, 1));
 }
+
 /**
  * _printf - Our custom printf function
  * @format: The format string
@@ -21,6 +23,7 @@ int _printf(const char *format, ...)
 va_list args;
 int count = 0;
 unsigned int i = 0;
+
 if (!format)
 return (-1);
 
@@ -28,20 +31,23 @@ va_start(args, format);
 
 while (format && format[i])
 {
-if (format[i] == '%' && (format[i + 1] == 'c'
-|| format[i + 1] == 's' || format[i + 1] == '%'))
+if (format[i] == '%')
 {
 i++;
 switch (format[i])
 {
 case 'c':
-count += _putchar(va_arg(args, int));
+count += print_char(args);
 break;
 case 's':
-/* Implementation for string goes here */
+count += print_string(args);
 break;
 case '%':
-count += _putchar('%');
+count += print_percent();
+break;
+case 'd':
+case 'i':
+count += print_int(args);
 break;
 }
 }
@@ -54,3 +60,4 @@ va_end(args);
 
 return (count);
 }
+
