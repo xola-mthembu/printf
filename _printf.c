@@ -34,6 +34,7 @@ char buffer[1024];
 int count = 0;
 int buffer_index = 0;
 unsigned int i = 0;
+char flags = '\0';
 
 if (!format)
 return (-1);
@@ -45,6 +46,12 @@ while (format && format[i])
 if (format[i] == '%')
 {
 i++;
+if (format[i] == '+' || format[i] == ' ' || format[i] == '#')
+{
+flags = format[i];
+i++;
+}
+
 switch (format[i])
 {
 case 'c':
@@ -61,27 +68,28 @@ count += print_percent(buffer, &buffer_index);
 break;
 case 'd':
 case 'i':
-count += print_int(args, buffer, &buffer_index);
+count += print_int(args, flags, buffer, &buffer_index);
 break;
 case 'b':
 count += print_binary(args, buffer, &buffer_index);
 break;
 case 'u':
-count += print_unsigned(args, buffer, &buffer_index);
+count += print_unsigned(args, flags, buffer, &buffer_index);
 break;
 case 'o':
-count += print_octal(args, buffer, &buffer_index);
+count += print_octal(args, flags, buffer, &buffer_index);
 break;
 case 'x':
-count += print_hex(args, 0, buffer, &buffer_index);
+count += print_hex(args, 0, flags, buffer, &buffer_index);
 break;
 case 'X':
-count += print_hex(args, 1, buffer, &buffer_index);
+count += print_hex(args, 1, flags, buffer, &buffer_index);
 break;
 case 'p':
 count += print_address(args, buffer, &buffer_index);
 break;
 }
+flags = '\0';
 }
 else
 {
