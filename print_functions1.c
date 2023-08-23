@@ -58,17 +58,20 @@ return (count);
 }
 
 /**
- * print_int_helper - Helper function to print an integer recursively
- * @n: Integer to print
+ * print_binary - Converts an unsigned int to binary
+ * @args: Argument list containing unsigned int
  * Return: Number of characters printed
  */
-int print_int_helper(int n)
+int print_binary(va_list args)
 {
+unsigned int n = va_arg(args, unsigned int);
 int count = 0;
-if (n / 10)
-count += print_int_helper(n / 10);
-_putchar(n % 10 + '0');
-count++;
+if (n == 0)
+{
+_putchar('0');
+return (1);
+}
+count += print_binary_helper(n);
 return (count);
 }
 
