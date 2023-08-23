@@ -51,6 +51,9 @@ break;
 case 'S':
 print_string_non_printable(va_arg(args, char *), buffer, &index);
 break;
+case 'p':
+print_pointer(va_arg(args, void *), buffer, &index);
+break;
 }
 i++;
 }

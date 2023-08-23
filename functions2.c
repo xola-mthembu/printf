@@ -29,4 +29,34 @@ write_buffer(buffer, index, &str[i], 1);
 }
 }
 }
+/**
+ * print_pointer - Prints the address of a pointer.
+ * @ptr: The pointer whose address to print.
+ * @buffer: The buffer to write to.
+ * @index: The current buffer index.
+ */
+void print_pointer(void *ptr, char *buffer, int *index)
+{
+unsigned long int address = (unsigned long int)ptr;
+char *hex_base = "0123456789abcdef";
+char hex[9];
+int i = 0;
+
+if (address == 0)
+{
+write_buffer(buffer, index, "(nil)", 5);
+return;
+}
+
+while (address > 0)
+{
+hex[i++] = hex_base[address % 16];
+address /= 16;
+}
+hex[i] = '\0';
+
+write_buffer(buffer, index, "0x", 2);
+for (int j = i - 1; j >= 0; j--)
+write_buffer(buffer, index, &hex[j], 1);
+}
 
