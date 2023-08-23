@@ -48,6 +48,9 @@ break;
 case 'X':
 print_hex(va_arg(args, unsigned int), 1);
 break;
+case 'S':
+print_string_non_printable(va_arg(args, char *), buffer, &index);
+break;
 }
 i++;
 }
