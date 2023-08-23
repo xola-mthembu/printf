@@ -11,11 +11,11 @@ int print_char(va_list args, char *buffer, int *index);
 int print_string(va_list args, char *buffer, int *index);
 int print_S(va_list args, char *buffer, int *index);
 int print_percent(char *buffer, int *index);
-int print_int(va_list args, char flags, char length, char *buffer, int *index);
+int print_int(va_list args, char flags, char length, int width, char *buffer, int *index);
 int print_binary(va_list args, char *buffer, int *index);
-int print_unsigned(va_list args, char flags, char *buffer, int *index);
-int print_octal(va_list args, char flags, char *buffer, int *index);
-int print_hex(va_list args, int upper_case, char flags, char *buffer, int *index);
+int print_unsigned(va_list args, char flags, int width, char *buffer, int *index);
+int print_octal(va_list args, char flags, int width, char *buffer, int *index);
+int print_hex(va_list args, int upper_case, char flags, int width, char *buffer, int *index);
 int print_address(va_list args, char *buffer, int *index);
 
 /* Helper function to print a character to a buffer */
