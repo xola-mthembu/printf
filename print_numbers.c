@@ -2,17 +2,18 @@
 #include <limits.h>
 
 /**
- * print_int - Prints an integer with support for '+' and ' ' flags
+ * print_int - Prints an integer
  * @args: Argument list containing integer
  * @flags: Character indicating the flags to apply
- * @length: Character indicating the length modifier ('l', 'h', or '\0')
+ * @length: Character indicating the length modifier
  * @width: Minimum field width
+ * @precision: The precision
  * @buffer: Buffer to write to
  * @index: Index in buffer to write at
  * Return: Number of characters printed
  */
-int print_int(va_list args, char flags, char length,
-int width, char *buffer, int *index)
+int print_int(va_list args, char flags,
+char length, int width, int precision, char *buffer, int *index)
 {
 long int n;
 int count = 0;
@@ -47,22 +48,23 @@ return (count);
 }
 
 /**
- * print_octal - Prints an unsigned integer in octal with support for '#' flag
+ * print_octal - Prints an unsigned integer
  * @n: The unsigned integer
  * @flags: Character indicating the flags to apply ('#', or '\0')
  * @width: Minimum field width
+ * @precision: The precision
  * @buffer: Buffer to write to
  * @index: Index in buffer to write at
  * Return: Number of characters printed
  */
 int print_octal(unsigned int n, char flags, int width,
-char *buffer, int *index)
+int precision, char *buffer, int *index)
 {
 int count = 0;
 if (flags == '#' && n != 0)
 count += _putchar_buffered('0', buffer, index);
 if (n / 8)
-count += print_octal(n / 8, flags, width, buffer, index);
+count += print_octal(n / 8, flags, width, precision, buffer, index);
 count += _putchar_buffered(n % 8 + '0', buffer, index);
 while (count < width)
 {
@@ -76,12 +78,13 @@ return (count);
  * @args: Argument list containing integer
  * @flags: Character indicating the flags to apply
  * @width: Minimum field width
+ * @precision: The precision
  * @buffer: Buffer to write to
  * @index: Index in buffer to write at
  * Return: Number of characters printed
  */
 int print_unsigned(va_list args, char flags,
-int width, char *buffer, int *index)
+int width, int precision, char *buffer, int *index)
 {
 unsigned int n = va_arg(args, unsigned int);
 int count = 0;
@@ -96,7 +99,7 @@ return (count);
 }
 
 /**
- * print_hex - Prints an unsigned integer in hexadecimal
+ * print_hex - Prints an unsigned integer
  * @n: The unsigned integer
  * @upper_case: Flag to print in upper case
  * @flags: Character indicating the flags to apply ('#', or '\0')

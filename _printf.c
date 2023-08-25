@@ -12,7 +12,7 @@ int _printf(const char *format, ...)
 int i, count = 0, buffer_index = 0;
 char buffer[1024] = {0};
 char flags = '\0', length = '\0';
-int width = 0;
+int width = 0, precision = -1;
 va_list args;
 va_start(args, format);
 for (i = 0; format && format[i]; i++)
@@ -35,6 +35,16 @@ width = width * 10 + (format[i + 1] - '0');
 i++;
 }
 }
+if (format[i] == '%' && format[i + 1] == '.')
+{
+i++;
+precision = 0;
+while (format[i + 1] >= '0' && format[i + 1] <= '9')
+{
+precision = precision * 10 + (format[i + 1] - '0');
+i++;
+}
+}
 if (format[i] == '%')
 {
 i++;
@@ -54,20 +64,20 @@ count += print_percent(buffer, &buffer_index);
 break;
 case 'd':
 case 'i':
-count += print_int(args, flags, length, width, buffer, &buffer_index);
+count += print_int(args, flags, length, width, precision, buffer, &buffer_index);
 break;
 case 'b':
 count += print_binary(args, buffer, &buffer_index);
 break;
 case 'u':
-count += print_unsigned(args, flags, width, buffer, &buffer_index);
+count += print_unsigned(args, flags, width, precision, buffer, &buffer_index);
 break;
 case 'o':
-count += print_octal(args, flags, width, buffer, &buffer_index);
+count += print_octal(args, flags, width, precision, buffer, &buffer_index);
 break;
 case 'x':
 case 'X':
-count += print_hex(args, format[i] == 'X', flags, width, buffer, &buffer_index);
+count += print_hex(args, format[i] == 'X', flags, width, precision, buffer, &buffer_index);
 break;
 case 'p':
 count += print_address(args, buffer, &buffer_index);
@@ -77,6 +87,7 @@ break;
 }
 flags = length = '\0';
 width = 0;
+precision = -1;
 }
 else
 {
